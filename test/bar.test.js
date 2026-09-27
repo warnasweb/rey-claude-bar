@@ -56,9 +56,15 @@ test('uninstall respects externally replaced setting',t=>{
 test('invalid settings are never overwritten',t=>{const base=temp(t),p=path.join(base,'settings.json');fs.writeFileSync(p,'invalid');assert.throws(()=>cli(base,'install'));assert.equal(fs.readFileSync(p,'utf8'),'invalid');});
 test('reinstall after uninstall preserves preferences',t=>{const base=temp(t);cli(base,'install');cli(base,'configure','theme','dracula');cli(base,'uninstall');cli(base,'install');assert.equal(JSON.parse(fs.readFileSync(path.join(base,'skills/rey-claude-bar/config/user.json'))).theme,'dracula');});
 const {snakeBoard}=require('../skills/rey-claude-bar/scripts/snake');
-test('snake grows with context, animates, fits width and handles unknown context',()=>{
+test('snake moves only right, wraps, fits width and handles unknown context',()=>{
   const c=validate({variant:'snake',theme:'mono'}), draw=(p,t=1000)=>snakeBoard({context_window:{used_percentage:p}},60,t,c).join('\n');
-  assert.ok((draw(90).match(/🟢/gu)||[]).length>(draw(10).match(/🟢/gu)||[]).length);
+  for(let tick=0;tick<24;tick++) {
+    const line=draw(20,tick*1000);
+    assert.equal(line.indexOf('🐍'),2+tick);
+    assert.doesNotMatch(line,/🟢|🍎/u);
+    assert.match(line,/^\[ +🐍·* \]/u);
+  }
+  assert.equal(draw(20,24000),draw(20,0));
   assert.notEqual(draw(20,1000),draw(20,2000));assert.match(draw(null),/ctx \?/);
   for(let w=1;w<130;w++) assert.ok(snakeBoard({},w,1000,c).every(l=>Array.from(l).reduce((n,ch)=>n+(ch.codePointAt(0)>0xffff?2:1),0)<=w));
 });

@@ -19,4 +19,4 @@ An existing unrelated status line is never silently replaced. Explain that `inst
 
 Installation copies the self-contained skill into the user's Claude configuration and saves a persistent `statusLine` command. No resident process is needed. The bar remains configured across sessions until removed. Run doctor after changes. Do not claim an interactive Claude restart was tested unless it actually was. Missing usage data is unavailable, not zero; transcript activity is recent observed activity, not a guaranteed live task state.
 
-Snake configuration enables a one-second statusLine refresh timer. Classic removes that timer. Snake is decorative: context grows its body, and active usage limits pause it. No keyboard gameplay.
+Snake configuration enables a one-second statusLine refresh timer. Classic removes that timer. Snake is decorative: the head moves left to right through dots and wraps, and active usage limits pause it. No keyboard gameplay.
