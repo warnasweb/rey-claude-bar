@@ -32,7 +32,7 @@ Enable it with `/rey-claude-bar configure variant snake` or:
 node skills/rey-claude-bar/scripts/manage.js configure variant snake
 ```
 
-The compact inline row shows only a 🐍 head followed by · dots: `[ 🐍········· ]`. The head moves left to right once per second, leaving blank space behind it, then wraps to the left edge. There is no body or food. This is a decorative status visualization, not a keyboard-controlled game. Context usage remains in the metric label. At a reported active 5-hour or weekly limit of 100%, the board pauses with `LIMIT REACHED`. Missing context shows `?`; expired limits do not pause it.
+The compact inline row shows only a right-facing `>` head followed by · dots: `[ >········· ]`. The head moves left to right once per second, leaving blank space behind it, then wraps to the left edge. There is no body or food. A directional text head replaces the snake emoji because terminals cannot mirror emoji reliably. This is a decorative status visualization, not a keyboard-controlled game. Context usage remains in the metric label. At a reported active 5-hour or weekly limit of 100%, the board pauses with `LIMIT REACHED`. Missing context shows `?`; expired limits do not pause it.
 
 The variant retains the metric rows and adds one compact emoji row. It adapts to narrow terminals and supports `NO_COLOR`/mono. The installer sets Claude's `refreshInterval` to one second for animation; older clients without timer refresh update only on normal status-line events. No background process or animation cache is created. Return with `/rey-claude-bar configure variant classic`; this removes Rey's animation interval.
 

@@ -18,9 +18,9 @@ function snakeBoard(data, width, now, cfg) {
   });
   // Move right one cell per second, wrapping to the left after the final cell.
   const offset=limited?0:Math.floor(now/1000)%columns;
-  const line='[ '+' '.repeat(offset)+'🐍'+'·'.repeat(columns-offset-1)+' ]';
+  const line='[ '+' '.repeat(offset)+'>'+ '·'.repeat(columns-offset-1)+' ]';
   const label=limited?'LIMIT REACHED':`ctx ${pct===null?'?':Math.round(pct)+'%'} used`;
-  const cellsWidth=columns+5;
+  const cellsWidth=columns+4;
   return [line+(cellsWidth+3+label.length<=width?' | '+label:'')];
 }
 module.exports={snakeBoard};

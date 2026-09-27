@@ -60,9 +60,9 @@ test('snake moves only right, wraps, fits width and handles unknown context',()=
   const c=validate({variant:'snake',theme:'mono'}), draw=(p,t=1000)=>snakeBoard({context_window:{used_percentage:p}},60,t,c).join('\n');
   for(let tick=0;tick<24;tick++) {
     const line=draw(20,tick*1000);
-    assert.equal(line.indexOf('🐍'),2+tick);
+    assert.equal(line.indexOf('>'),2+tick);
     assert.doesNotMatch(line,/🟢|🍎/u);
-    assert.match(line,/^\[ +🐍·* \]/u);
+    assert.match(line,/^\[ +>·* \]/u);
   }
   assert.equal(draw(20,24000),draw(20,0));
   assert.notEqual(draw(20,1000),draw(20,2000));assert.match(draw(null),/ctx \?/);
@@ -78,6 +78,6 @@ test('snake setting persists and classic removes animation refresh',t=>{
   const base=temp(t);cli(base,'install');cli(base,'configure','variant','snake');
   const settings=()=>JSON.parse(fs.readFileSync(path.join(base,'settings.json')));
   assert.equal(settings().statusLine.refreshInterval,1);cli(base,'install');assert.equal(settings().statusLine.refreshInterval,1);
-  assert.match(execFileSync('/bin/sh',['-c',settings().statusLine.command],{input:'{}',encoding:'utf8'}),/🐍/);
+  assert.match(execFileSync('/bin/sh',['-c',settings().statusLine.command],{input:'{}',encoding:'utf8'}),/>·/);
   cli(base,'configure','variant','classic');assert.equal(settings().statusLine.refreshInterval,undefined);
 });
