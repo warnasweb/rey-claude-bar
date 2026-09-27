@@ -46,6 +46,7 @@ function main() {
     next.command = command;
     write(stateFile,next);
     settings.statusLine={type:'command',command,padding:0};
+    if(read(path.join(target,'config/user.json'),{}).variant==='snake') settings.statusLine.refreshInterval=1;
     write(settingsFile,settings);
     console.log(`Installed ${target}\nPersistent statusLine saved in ${settingsFile}`);
   } else if(action === 'configure') {
@@ -53,7 +54,13 @@ function main() {
     if(args.length!==2) throw Error('Usage: configure <option> <value>');
     const [key,raw] = args; let value; try {value=JSON.parse(raw);} catch {value=raw;}
     const file = path.join(target,'config/user.json');
+    if(args[0]==='variant' && settings.statusLine?.command!==state.command) throw Error('Active statusLine is not owned by Rey');
     const current = read(file,{}); const updated = {...current,[key]:value}; validate(updated); write(file,updated);
+    if(key==='variant') {
+      if(value==='snake') settings.statusLine.refreshInterval=1;
+      else delete settings.statusLine.refreshInterval;
+      write(settingsFile,settings);
+    }
     console.log(`Configured ${key}=${JSON.stringify(value)}`);
   } else if(action === 'uninstall') {
     if(!state) {console.log('Not installed');return;}

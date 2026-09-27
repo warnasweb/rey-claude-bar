@@ -24,6 +24,20 @@ In Claude Code, invoke `/rey-claude-bar`, `/rey-claude-bar configure theme dracu
 
 Existing unrelated status lines require `install --replace`. Their value is saved in `rey-claude-bar-install.json` for restoration. Unrelated settings are preserved. Invalid JSON is rejected. Settings writes use temporary files and rename. Avoid simultaneous install/configure/uninstall operations or editing settings during installation.
 
+## Nokia-style Snake variant
+
+Enable it with `/rey-claude-bar configure variant snake` or:
+
+```sh
+node skills/rey-claude-bar/scripts/manage.js configure variant snake
+```
+
+The green retro board uses `#` body pixels, a directional head and `*` food marker. Context usage controls body length; a closed serpentine path moves one cell per second. This is a decorative status visualization, not a keyboard-controlled game. Food is a moving visual target; growth represents context, not a gameplay score. At a reported active 5-hour or weekly limit of 100%, the board pauses with `LIMIT REACHED`. Missing context shows `?`; expired limits do not pause it.
+
+The variant retains the metric rows and adds a four-row board with borders. It adapts to narrow terminals and supports `NO_COLOR`/mono. The installer sets Claude's `refreshInterval` to one second for animation; older clients without timer refresh update only on normal status-line events. No background process or animation cache is created. Return with `/rey-claude-bar configure variant classic`; this removes Rey's animation interval.
+
+Inspired by the metric-driven arcade presentation in [sorosora/arcade-statusline](https://github.com/sorosora/arcade-statusline), implemented independently with a Snake design. No code or assets were copied.
+
 ## Configure and remove
 
 ```sh
@@ -35,6 +49,7 @@ node skills/rey-claude-bar/scripts/manage.js uninstall
 
 | Option | Values / default |
 | --- | --- |
+| variant | `classic` (default), `snake` |
 | theme | `default`, `dracula`, `mono` |
 | width | 20–500 columns; default 120, further limited by `COLUMNS` |
 | git, model, context, usage, session, cost, activity, status | `true` or `false`; default true |

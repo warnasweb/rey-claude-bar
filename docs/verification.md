@@ -9,3 +9,7 @@ Environment: macOS, Node.js 22.15.1, Git 2.41.0.
 - Isolated tests verified previous-statusLine restoration, unrelated-setting preservation, external replacement preservation, malformed settings refusal, reinstall and retained preferences.
 
 Limitation: Claude Code executable was not available on PATH (doctor: claude=false). An interactive Claude session, actual skill discovery, and quit/reopen UI acceptance were not tested. Persistent configuration and fresh-process execution were tested. Follow README's interactive acceptance check after installing Claude Code. CI matrix is configured but remote results are separate from this local record.
+
+## Snake variant verification
+
+15 tests passed using the bundled compatible Node runtime. Added checks for a continuous, non-self-crossing closed route, context growth, animation frames, narrow widths, unavailable metrics, active/expired rate limits, persisted variant, reinstall, and returning to classic. System Node binaries returned a CPU architecture error in this execution environment. Interactive Claude animation remains an acceptance check for the user.

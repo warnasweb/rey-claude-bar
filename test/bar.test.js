@@ -55,3 +55,26 @@ test('uninstall respects externally replaced setting',t=>{
 });
 test('invalid settings are never overwritten',t=>{const base=temp(t),p=path.join(base,'settings.json');fs.writeFileSync(p,'invalid');assert.throws(()=>cli(base,'install'));assert.equal(fs.readFileSync(p,'utf8'),'invalid');});
 test('reinstall after uninstall preserves preferences',t=>{const base=temp(t);cli(base,'install');cli(base,'configure','theme','dracula');cli(base,'uninstall');cli(base,'install');assert.equal(JSON.parse(fs.readFileSync(path.join(base,'skills/rey-claude-bar/config/user.json'))).theme,'dracula');});
+const {snakeBoard,route}=require('../skills/rey-claude-bar/scripts/snake');
+test('snake route is closed, adjacent and contains every cell once',()=>{
+  for(const width of [18,30,48]) {const r=route(width);assert.equal(new Set(r.map(String)).size,width*4);r.forEach(([x,y],i)=>{const [a,b]=r[(i+1)%r.length];assert.equal(Math.abs(x-a)+Math.abs(y-b),1);});}
+});
+test('snake grows with context, animates, fits width and handles unknown context',()=>{
+  const c=validate({variant:'snake',theme:'mono'}), draw=(p,t=1000)=>snakeBoard({context_window:{used_percentage:p}},30,t,c).join('\n');
+  assert.ok((draw(90).match(/#/g)||[]).length>(draw(10).match(/#/g)||[]).length);
+  assert.notEqual(draw(20,1000),draw(20,2000));assert.match(draw(null),/ctx \?/);
+  for(let w=1;w<130;w++) assert.ok(snakeBoard({},w,1000,c).every(l=>l.length<=w));
+});
+test('snake pauses only for reported active limits',()=>{
+  const c=validate({variant:'snake'}),d={rate_limits:{five_hour:{used_percentage:100,resets_at:100}}};
+  assert.deepEqual(snakeBoard(d,40,1000,c),snakeBoard(d,40,2000,c));
+  assert.match(snakeBoard(d,40,1000,c).join('\n'),/LIMIT REACHED/);
+  assert.doesNotMatch(snakeBoard(d,40,101000,c).join('\n'),/LIMIT REACHED/);
+});
+test('snake setting persists and classic removes animation refresh',t=>{
+  const base=temp(t);cli(base,'install');cli(base,'configure','variant','snake');
+  const settings=()=>JSON.parse(fs.readFileSync(path.join(base,'settings.json')));
+  assert.equal(settings().statusLine.refreshInterval,1);cli(base,'install');assert.equal(settings().statusLine.refreshInterval,1);
+  assert.match(execFileSync('/bin/sh',['-c',settings().statusLine.command],{input:'{}',encoding:'utf8'}),/SNAKE/);
+  cli(base,'configure','variant','classic');assert.equal(settings().statusLine.refreshInterval,undefined);
+});
