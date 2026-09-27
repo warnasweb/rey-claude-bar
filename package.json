@@ -1,0 +1,1 @@
+{"name":"rey-claude-bar","version":"0.1.0","private":true,"description":"Persistent, dependency-free Claude Code status line and local skill","license":"MIT","type":"commonjs","engines":{"node":">=20"},"scripts":{"test":"node --test","doctor":"node skills/rey-claude-bar/scripts/manage.js doctor","demo":"node skills/rey-claude-bar/scripts/statusline.js < test/fixture.json"}}

@@ -1,0 +1,1 @@
+{"model":{"display_name":"Claude"},"session_name":"Build Rey","context_window":{"used_percentage":42},"rate_limits":{"five_hour":{"used_percentage":23},"seven_day":{"used_percentage":41}},"cost":{"total_cost_usd":0.38,"total_duration_ms":720000},"effort":{"level":"high"}}
