@@ -5,6 +5,7 @@ const path = require('node:path');
 const {execFileSync} = require('node:child_process');
 const {snakeBoard} = require('./snake');
 const {chopper} = require('./chopper');
+const {car} = require('./car');
 const defaults = require('../config/default.json');
 const numeric = n => typeof n === 'number' && Number.isFinite(n) && n >= 0;
 const clean = s => typeof s === 'string' ? s.replace(/\x1b\[[0-?]*[ -/]*[@-~]/g, '').replace(/[\x00-\x1f\x7f-\x9f]/g, '').slice(0, 300) : '';
@@ -15,7 +16,7 @@ function validate(input) {
   if (!input || typeof input !== 'object' || Array.isArray(input)) throw Error('Configuration must be an object');
   for (const [k,v] of Object.entries(input)) {
     if (!(k in defaults)) throw Error(`Unknown option: ${k}`);
-    if (k === 'variant' ? !['classic','snake','chopper'].includes(v) : k === 'theme' ? !['default','dracula','mono'].includes(v) : k === 'width' ? !Number.isInteger(v) || v < 20 || v > 500 : typeof v !== 'boolean') throw Error(`Invalid value for ${k}`);
+    if (k === 'variant' ? !['classic','snake','chopper','car'].includes(v) : k === 'theme' ? !['default','dracula','mono'].includes(v) : k === 'width' ? !Number.isInteger(v) || v < 20 || v > 500 : typeof v !== 'boolean') throw Error(`Invalid value for ${k}`);
   }
   return {...defaults, ...input};
 }
@@ -104,7 +105,8 @@ function render(data, cfg = defaults, env = process.env) {
     lines.push(...board);
   }
   if (cfg.variant === 'chopper') lines.push(...chopper(Math.floor(width), Date.now()));
-  return lines.map(line=>color ? `\x1b[${cfg.variant==='chopper'?'31':cfg.variant==='snake'?'32':cfg.theme==='dracula'?'95':'36'}m${line}\x1b[0m` : line).join('\n') || 'rey-claude-bar';
+  if (cfg.variant === 'car') lines.push(...car(Math.floor(width), Date.now()));
+  return lines.map(line=>color ? `\x1b[${cfg.variant==='car'?'34':cfg.variant==='chopper'?'31':cfg.variant==='snake'?'32':cfg.theme==='dracula'?'95':'36'}m${line}\x1b[0m` : line).join('\n') || 'rey-claude-bar';
 }
 if (require.main === module) {
   let raw = '', oversized = false;

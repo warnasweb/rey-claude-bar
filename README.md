@@ -50,6 +50,10 @@ Select `/rey-claude-bar configure variant chopper` for this red ASCII helicopter
 
 The helicopter moves one column to the right each second while its rotor spins. It stays fully within the available width, then wraps to the left edge. In very narrow terminals, movement pauses and the drawing is clipped to fit. The three-row drawing fits beneath the existing metrics. `NO_COLOR` or the mono theme disables red coloring. Both chopper and snake enable the persistent one-second refresh timer; classic removes it. Return to Snake with `/rey-claude-bar configure variant snake`.
 
+## Blue car variant
+
+Select `/rey-claude-bar configure variant car` for a blue car driving left to right with animated wheels. It advances one column per second and wraps after reaching the right edge. The three-row drawing stays within the configured width and clips in very narrow terminals. `NO_COLOR` or mono disables the blue coloring. Like Snake and Chopper, Car enables the one-second refresh timer; classic removes it.
+
 ## Configure and remove
 
 ```sh
@@ -61,7 +65,7 @@ node skills/rey-claude-bar/scripts/manage.js uninstall
 
 | Option | Values / default |
 | --- | --- |
-| variant | `classic` (default), `snake`, `chopper` |
+| variant | `classic` (default), `snake`, `chopper`, `car` |
 | theme | `default`, `dracula`, `mono` |
 | width | 20–500 columns; default 120, further limited by `COLUMNS` |
 | git, model, context, usage, session, cost, activity, status | `true` or `false`; default true |

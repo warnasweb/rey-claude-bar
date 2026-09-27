@@ -104,3 +104,25 @@ test('chopper configuration persists with timer through reinstall',t=>{
   assert.match(execFileSync('/bin/sh',['-c',s.statusLine.command],{input:'{}',encoding:'utf8'}),/\*>=====\[_\]L\)/);
   cli(base,'configure','variant','classic');assert.equal(JSON.parse(fs.readFileSync(path.join(base,'settings.json'))).statusLine.refreshInterval,undefined);
 });
+const {car}=require('../skills/rey-claude-bar/scripts/car');
+test('blue car drives right, animates wheels, wraps and fits narrow terminals',()=>{
+  const a=car(60,0), b=car(60,1000);
+  const size=Math.max(...a.map(line=>line.length));
+  assert.equal(b[0],' '+a[0]);assert.match(a[2],/\(o\)/);assert.match(b[2],/\(O\)/);
+  for(let tick=0;tick<=60-size;tick++) {
+    const rows=car(60,tick*1000);assert.equal(rows[2].indexOf('|'),tick);
+    assert.ok(rows.every(line=>line.length<=60));
+  }
+  assert.equal(car(60,(61-size)*1000)[2].indexOf('|'),0);
+  for(let w=1;w<60;w++) assert.ok(car(w,3000).every(line=>line.length<=w));
+  const c=validate({variant:'car'});assert.match(render({},c,{}),/\x1b\[34m/);
+  assert.doesNotMatch(render({},c,{NO_COLOR:''}),/\x1b/);
+  assert.doesNotMatch(render({},validate({variant:'car',theme:'mono'}),{}),/\x1b/);
+});
+test('car persists through reinstall with refresh timer and can return to classic',t=>{
+  const base=temp(t);cli(base,'install');cli(base,'configure','variant','car');cli(base,'install');
+  const readSettings=()=>JSON.parse(fs.readFileSync(path.join(base,'settings.json')));
+  assert.equal(readSettings().statusLine.refreshInterval,1);
+  assert.match(execFileSync('/bin/sh',['-c',readSettings().statusLine.command],{input:'{}',encoding:'utf8'}),/\([oO]\)/);
+  cli(base,'configure','variant','classic');assert.equal(readSettings().statusLine.refreshInterval,undefined);
+});
