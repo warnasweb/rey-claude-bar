@@ -82,10 +82,16 @@ test('snake setting persists and classic removes animation refresh',t=>{
   cli(base,'configure','variant','classic');assert.equal(settings().statusLine.refreshInterval,undefined);
 });
 const {chopper}=require('../skills/rey-claude-bar/scripts/chopper');
-test('chopper keeps supplied fuselage and animates rotor within width',()=>{
+test('chopper travels right, wraps, and animates rotor within width',()=>{
   const a=chopper(60,0), b=chopper(60,1000);
-  assert.equal(a[1],'*>=====[_]L)');assert.notEqual(a[0],b[0]);assert.deepEqual(a.slice(1),b.slice(1));
-  assert.deepEqual(a,chopper(60,4000));
+  assert.equal(a[1],'*>=====[_]L)');assert.notEqual(a[0],b[0]);assert.deepEqual(a.slice(1).map(line=>' '+line),b.slice(1));
+  assert.equal(chopper(60,4000)[0],'    '+a[0]);
+  for(let tick=0;tick<=46;tick++) {
+    const rows=chopper(60,tick*1000);
+    assert.equal(rows[1].indexOf('*'),tick);
+    assert.ok(rows.every(line=>line.length<=60));
+  }
+  assert.equal(chopper(60,47000)[1],a[1]);
   for(let w=1;w<60;w++) assert.ok(chopper(w,0).every(line=>line.length<=w));
   const c=validate({variant:'chopper'});
   assert.match(render({},c,{}),/\x1b\[31m/);

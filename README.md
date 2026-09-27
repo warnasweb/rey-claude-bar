@@ -48,7 +48,7 @@ Select `/rey-claude-bar configure variant chopper` for this red ASCII helicopter
       -'-`-
 ```
 
-The rotor changes once per second; the helicopter stays in place. The three-row drawing fits beneath the existing metrics. `NO_COLOR` or the mono theme disables red coloring. Both chopper and snake enable the persistent one-second refresh timer; classic removes it. Return to Snake with `/rey-claude-bar configure variant snake`.
+The helicopter moves one column to the right each second while its rotor spins. It stays fully within the available width, then wraps to the left edge. In very narrow terminals, movement pauses and the drawing is clipped to fit. The three-row drawing fits beneath the existing metrics. `NO_COLOR` or the mono theme disables red coloring. Both chopper and snake enable the persistent one-second refresh timer; classic removes it. Return to Snake with `/rey-claude-bar configure variant snake`.
 
 ## Configure and remove
 
