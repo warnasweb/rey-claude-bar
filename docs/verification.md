@@ -13,3 +13,7 @@ Limitation: Claude Code executable was not available on PATH (doctor: claude=fal
 ## Snake variant verification
 
 15 tests passed using the bundled compatible Node runtime. Added checks for a continuous, non-self-crossing closed route, context growth, animation frames, narrow widths, unavailable metrics, active/expired rate limits, persisted variant, reinstall, and returning to classic. System Node binaries returned a CPU architecture error in this execution environment. Interactive Claude animation remains an acceptance check for the user.
+
+## Snake direction and chopper update
+
+16 tests pass. Snake uses the original emoji moving right to left, with dots ahead and no body/food. Chopper tests cover supplied fuselage, rotor frames, red ANSI color, mono/NO_COLOR, narrow widths, timer persistence, reinstall and return to classic. Interactive terminal appearance remains unverified.

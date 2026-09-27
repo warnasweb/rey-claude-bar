@@ -13,10 +13,10 @@ Manage the status bar using `scripts/manage.js` relative to this SKILL.md's dire
 - Doctor: run the doctor command and explain any failed checks.
 - Uninstall: run the uninstall command. It restores the previous status line only while Rey owns the setting; retained user configuration is intentional.
 
-Options: `variant` = classic or snake (Nokia-style animated board); `theme` = default, dracula, mono; `width` = integer 20–500; `git`, `model`, `context`, `usage`, `session`, `cost`, `activity`, `status` = true/false. Example: `configure cost false`.
+Options: `variant` = classic, snake (original emoji moving right to left), or chopper (red helicopter with animated rotor); `theme` = default, dracula, mono; `width` = integer 20–500; `git`, `model`, `context`, `usage`, `session`, `cost`, `activity`, `status` = true/false. Example: `configure cost false`.
 
 An existing unrelated status line is never silently replaced. Explain that `install --replace` saves and replaces it; use that flag only if the user requested replacement. Respect `CLAUDE_CONFIG_DIR`; `--claude-dir <path>` permits an explicit isolated configuration directory.
 
 Installation copies the self-contained skill into the user's Claude configuration and saves a persistent `statusLine` command. No resident process is needed. The bar remains configured across sessions until removed. Run doctor after changes. Do not claim an interactive Claude restart was tested unless it actually was. Missing usage data is unavailable, not zero; transcript activity is recent observed activity, not a guaranteed live task state.
 
-Snake configuration enables a one-second statusLine refresh timer. Classic removes that timer. Snake is decorative: the head moves left to right through dots and wraps, and active usage limits pause it. No keyboard gameplay.
+Snake or chopper configuration enables a one-second statusLine refresh timer. Classic removes that timer. Snake is decorative: the emoji moves right to left through dots and wraps, and active usage limits pause it. No keyboard gameplay.

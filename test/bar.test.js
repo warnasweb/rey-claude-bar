@@ -56,13 +56,13 @@ test('uninstall respects externally replaced setting',t=>{
 test('invalid settings are never overwritten',t=>{const base=temp(t),p=path.join(base,'settings.json');fs.writeFileSync(p,'invalid');assert.throws(()=>cli(base,'install'));assert.equal(fs.readFileSync(p,'utf8'),'invalid');});
 test('reinstall after uninstall preserves preferences',t=>{const base=temp(t);cli(base,'install');cli(base,'configure','theme','dracula');cli(base,'uninstall');cli(base,'install');assert.equal(JSON.parse(fs.readFileSync(path.join(base,'skills/rey-claude-bar/config/user.json'))).theme,'dracula');});
 const {snakeBoard}=require('../skills/rey-claude-bar/scripts/snake');
-test('snake moves only right, wraps, fits width and handles unknown context',()=>{
+test('snake moves only left, wraps, fits width and handles unknown context',()=>{
   const c=validate({variant:'snake',theme:'mono'}), draw=(p,t=1000)=>snakeBoard({context_window:{used_percentage:p}},60,t,c).join('\n');
   for(let tick=0;tick<24;tick++) {
     const line=draw(20,tick*1000);
-    assert.equal(line.indexOf('>'),2+tick);
+    assert.equal(line.indexOf('🐍'),2+23-tick);
     assert.doesNotMatch(line,/🟢|🍎/u);
-    assert.match(line,/^\[ +>·* \]/u);
+    assert.match(line,/^\[ ·*🐍 +\]/u);
   }
   assert.equal(draw(20,24000),draw(20,0));
   assert.notEqual(draw(20,1000),draw(20,2000));assert.match(draw(null),/ctx \?/);
@@ -78,6 +78,23 @@ test('snake setting persists and classic removes animation refresh',t=>{
   const base=temp(t);cli(base,'install');cli(base,'configure','variant','snake');
   const settings=()=>JSON.parse(fs.readFileSync(path.join(base,'settings.json')));
   assert.equal(settings().statusLine.refreshInterval,1);cli(base,'install');assert.equal(settings().statusLine.refreshInterval,1);
-  assert.match(execFileSync('/bin/sh',['-c',settings().statusLine.command],{input:'{}',encoding:'utf8'}),/>·/);
+  assert.match(execFileSync('/bin/sh',['-c',settings().statusLine.command],{input:'{}',encoding:'utf8'}),/🐍/);
   cli(base,'configure','variant','classic');assert.equal(settings().statusLine.refreshInterval,undefined);
+});
+const {chopper}=require('../skills/rey-claude-bar/scripts/chopper');
+test('chopper keeps supplied fuselage and animates rotor within width',()=>{
+  const a=chopper(60,0), b=chopper(60,1000);
+  assert.equal(a[1],'*>=====[_]L)');assert.notEqual(a[0],b[0]);assert.deepEqual(a.slice(1),b.slice(1));
+  assert.deepEqual(a,chopper(60,4000));
+  for(let w=1;w<60;w++) assert.ok(chopper(w,0).every(line=>line.length<=w));
+  const c=validate({variant:'chopper'});
+  assert.match(render({},c,{}),/\x1b\[31m/);
+  assert.doesNotMatch(render({},c,{NO_COLOR:''}),/\x1b/);
+  assert.doesNotMatch(render({},validate({variant:'chopper',theme:'mono'}),{}),/\x1b/);
+});
+test('chopper configuration persists with timer through reinstall',t=>{
+  const base=temp(t);cli(base,'install');cli(base,'configure','variant','chopper');cli(base,'install');
+  const s=JSON.parse(fs.readFileSync(path.join(base,'settings.json')));assert.equal(s.statusLine.refreshInterval,1);
+  assert.match(execFileSync('/bin/sh',['-c',s.statusLine.command],{input:'{}',encoding:'utf8'}),/\*>=====\[_\]L\)/);
+  cli(base,'configure','variant','classic');assert.equal(JSON.parse(fs.readFileSync(path.join(base,'settings.json'))).statusLine.refreshInterval,undefined);
 });

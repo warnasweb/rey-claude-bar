@@ -16,11 +16,11 @@ function snakeBoard(data, width, now, cfg) {
     const w=data.rate_limits?.[key];
     return number(w?.used_percentage) && w.used_percentage>=100 && (!number(w.resets_at)||w.resets_at*1000>now);
   });
-  // Move right one cell per second, wrapping to the left after the final cell.
-  const offset=limited?0:Math.floor(now/1000)%columns;
-  const line='[ '+' '.repeat(offset)+'>'+ '·'.repeat(columns-offset-1)+' ]';
+  // Move left one cell per second, wrapping to the right after the final cell.
+  const offset=limited?columns-1:columns-1-Math.floor(now/1000)%columns;
+  const line='[ '+'·'.repeat(offset)+'🐍'+' '.repeat(columns-offset-1)+' ]';
   const label=limited?'LIMIT REACHED':`ctx ${pct===null?'?':Math.round(pct)+'%'} used`;
-  const cellsWidth=columns+4;
+  const cellsWidth=columns+5;
   return [line+(cellsWidth+3+label.length<=width?' | '+label:'')];
 }
 module.exports={snakeBoard};

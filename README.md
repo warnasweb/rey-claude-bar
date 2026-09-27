@@ -32,11 +32,23 @@ Enable it with `/rey-claude-bar configure variant snake` or:
 node skills/rey-claude-bar/scripts/manage.js configure variant snake
 ```
 
-The compact inline row shows only a right-facing `>` head followed by · dots: `[ >········· ]`. The head moves left to right once per second, leaving blank space behind it, then wraps to the left edge. There is no body or food. A directional text head replaces the snake emoji because terminals cannot mirror emoji reliably. This is a decorative status visualization, not a keyboard-controlled game. Context usage remains in the metric label. At a reported active 5-hour or weekly limit of 100%, the board pauses with `LIMIT REACHED`. Missing context shows `?`; expired limits do not pause it.
+The compact inline row shows the original 🐍 emoji and dots: `[ ·········🐍 ]`. The snake moves right to left once per second, leaving blank space behind it, then wraps to the right edge. There is no body or food. Context usage remains in the metric label. At a reported active 5-hour or weekly limit of 100%, the snake pauses with `LIMIT REACHED`. Missing context shows `?`; expired limits do not pause it.
 
 The variant retains the metric rows and adds one compact emoji row. It adapts to narrow terminals and supports `NO_COLOR`/mono. The installer sets Claude's `refreshInterval` to one second for animation; older clients without timer refresh update only on normal status-line events. No background process or animation cache is created. Return with `/rey-claude-bar configure variant classic`; this removes Rey's animation interval.
 
 Inspired by the metric-driven arcade presentation in [sorosora/arcade-statusline](https://github.com/sorosora/arcade-statusline), implemented independently with a Snake design. No code or assets were copied.
+
+## Red chopper variant
+
+Select `/rey-claude-bar configure variant chopper` for this red ASCII helicopter with animated rotor blades:
+
+```text
+   -----|-----
+*>=====[_]L)
+      -'-`-
+```
+
+The rotor changes once per second; the helicopter stays in place. The three-row drawing fits beneath the existing metrics. `NO_COLOR` or the mono theme disables red coloring. Both chopper and snake enable the persistent one-second refresh timer; classic removes it. Return to Snake with `/rey-claude-bar configure variant snake`.
 
 ## Configure and remove
 
@@ -49,7 +61,7 @@ node skills/rey-claude-bar/scripts/manage.js uninstall
 
 | Option | Values / default |
 | --- | --- |
-| variant | `classic` (default), `snake` |
+| variant | `classic` (default), `snake`, `chopper` |
 | theme | `default`, `dracula`, `mono` |
 | width | 20–500 columns; default 120, further limited by `COLUMNS` |
 | git, model, context, usage, session, cost, activity, status | `true` or `false`; default true |
